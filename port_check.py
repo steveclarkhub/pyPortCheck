@@ -12,5 +12,6 @@ def port_check(hostname, portno):
 
 # print(con)
 
-output = port_check("45.33.32.156",80)
-print(output)
+output = port_check("8.8.8.8",5)
+if output == 0:
+     print("return code: ", output, "success")
