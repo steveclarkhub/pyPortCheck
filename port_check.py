@@ -3,9 +3,8 @@ import socket  #standard lib
 
 def port_check(hostname, portno):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(3)
         con = s.connect_ex((hostname, portno))
-    # s.sendall(b"Hello, world")
-    # data = s.recv(1024)
     return con 
 
 # connect_ex throw a code on exception instead of the exception itself
@@ -16,6 +15,7 @@ def port_check(hostname, portno):
 parser = argparse.ArgumentParser(description="Process hostname and port.")
 parser.add_argument('--hostname', type=str, default='8.8.8.8', help='The hostname to connect to (default: 8.8.8.8)')
 parser.add_argument('--port', type=int, default='443', help='The port number on target server (default: 443)')
+parser.add_argument('--file', type=str, help='path to the CSV file with a list of targets and ports')
 
 args = parser.parse_args()
 ## test args
@@ -24,9 +24,21 @@ args = parser.parse_args()
 #print(type(args.port))
 #print(args.port)
 
-output = port_check(args.hostname,args.port)
-
-if output == 0:
-     print("return code: ", output, "success")
+if args.file:
+     print("file flag present")
+     print(args.file,"is the path")
 else:
-     print("return code: ", output, "failure")
+    output = port_check(args.hostname,args.port)
+
+    if output == 0:
+        print("return code: ", output, "success")
+    else:
+        print("return code: ", output, "failure")
+
+
+     
+
+
+
+
+
