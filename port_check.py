@@ -13,9 +13,9 @@ def port_check(hostname, portno):
 # print(con)
 
 parser = argparse.ArgumentParser(description="Process hostname and port.")
-parser.add_argument('--hostname', type=str, default='8.8.8.8', help='The hostname to connect to (default: 8.8.8.8)')
-parser.add_argument('--port', type=int, default='443', help='The port number on target server (default: 443)')
-parser.add_argument('--file', type=str, help='path to the CSV file with a list of targets and ports')
+parser.add_argument('-s', '--server', type=str, default='8.8.8.8', help='The server to connect to (default: 8.8.8.8)')
+parser.add_argument('-p', '--port', type=int, default='443', help='The port number on target server (default: 443)')
+parser.add_argument('-f', '--file', type=str, help='path to the CSV file with a list of targets and ports')
 
 args = parser.parse_args()
 ## test args
