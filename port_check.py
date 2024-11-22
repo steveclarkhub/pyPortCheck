@@ -7,8 +7,9 @@ def port_check(hostname, portno):
         con = s.connect_ex((hostname, portno))
     return con 
 
-# connect_ex throw a code on exception instead of the exception itself
-# code = tcp socket error codes. 0 = success 
+# connect_ex throws code (int) on exception instead of the exception
+# code = tcp socket error codes. 0 = success. !0 = fail. 
+# codes 100xx = windows, xx = *nix
 
 # print(con)
 
@@ -37,8 +38,4 @@ else:
 
 
      
-
-
-
-
 
