@@ -9,23 +9,17 @@ def port_check(servername, portno):
         con = s.connect_ex((servername, portno))
     return con 
 
-# connect_ex throws code (int) on exception instead of the exception
-# code = tcp socket error codes. 0 = success. !0 = fail. 
-# codes 100xx = windows, xx = *nix
-
-# print(con)
+# connect_ex throws tcp socket err code (int). 0 = success. !0 = fail. 
+# Codes 100xx = MS Windows, xx = Nix, MacOS
 
 parser = argparse.ArgumentParser(description="Process hostname and port.")
 parser.add_argument('-s', '--servername', type=str, default='8.8.8.8', help='The server to connect to (default: 8.8.8.8)')
 parser.add_argument('-p', '--port', type=int, default='443', help='The port number on target server (default: 443)')
-parser.add_argument('-f', '--file', type=str, help='path to the CSV file with a list of targets and ports')
+parser.add_argument('-f', '--file', type=str, help='path to CSV. Format: arbitrary name, fqdn or ip, port')
 
 args = parser.parse_args()
-## test args
-#print(type(args.hostname))
-#print(args.hostname)
-#print(type(args.port))
-#print(args.port)
+# test args: #1 print(type(args.hostname)) #2 print(args.hostname) 
+# #3 print(type(args.port)) #4 print(args.port)
 
 if args.file:
      print("file flag present")
@@ -39,20 +33,16 @@ if args.file:
                 # w/o join, get a dict dump {'k':'v', 'k':'v', 'k':'v',}
                 line_ct +=1
             else:
-                
                 targ,p = row["Tcp_Target"],int(row["Port"])
-                # print(targ,p)
                 result = (port_check(targ,p))
-                # print(port_check(targ,p))
+                # test vals print(port_check(targ,p)) & print(targ,p)
                 if result == 0:
                     print(f'{row["Resource"]} ({row["Tcp_Target"]}) SUCCEEDS at port {row["Port"]}')
                 else:
-                    print(f'{row["Resource"]} ({row["Tcp_Target"]}) failed to respond at port {row["Port"]}')
-                # print(f'\t{row["Resource"]} pings target {row["Tcp_Target"]} at port {row["Port"]}')
+                    print(f'{row["Resource"]} ({row["Tcp_Target"]}) FAILS to respond at port {row["Port"]}')
                 line_ct +=1
 else:
     output = port_check(args.servername,args.port)
-
     if output == 0:
         print("return code: ", output, "success")
     else:
