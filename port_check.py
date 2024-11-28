@@ -1,5 +1,7 @@
+# std lib
 import argparse 
-import socket  #standard lib
+import socket  
+import csv
 
 def port_check(servername, portno):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -28,6 +30,26 @@ args = parser.parse_args()
 if args.file:
      print("file flag present")
      print(args.file,"is the path")
+     with open (args.file, mode='r') as csv_import:
+        csv_readobj = csv.DictReader(csv_import) # ordered dictionary
+        line_ct = 0
+        for row in csv_readobj:
+            if line_ct == 0:
+                print(f'Column Names are {", ".join(row)}')
+                # w/o join, get a dict dump {'k':'v', 'k':'v', 'k':'v',}
+                line_ct +=1
+            else:
+                
+                targ,p = row["Tcp_Target"],int(row["Port"])
+                # print(targ,p)
+                result = (port_check(targ,p))
+                # print(port_check(targ,p))
+                if result == 0:
+                    print(f'{row["Resource"]} ({row["Tcp_Target"]}) SUCCEEDS at port {row["Port"]}')
+                else:
+                    print(f'{row["Resource"]} ({row["Tcp_Target"]}) failed to respond at port {row["Port"]}')
+                # print(f'\t{row["Resource"]} pings target {row["Tcp_Target"]} at port {row["Port"]}')
+                line_ct +=1
 else:
     output = port_check(args.servername,args.port)
 
